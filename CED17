@@ -1,0 +1,30 @@
+pragma solidity ^0.4.15;
+// Aircrfat Parts Certificate of Authenticity 
+// All aircraft parts need to have a FAA Form8130 or EASA Form1, which proves that the parts are airworthy and authentic.
+// This smart contract is designed to check for proof of authenticity(FAA Form8130 or EASA Form1)
+
+contract ProofofAuthenticicty {
+ mapping (bytes32 => bool) private proofs;
+ // store a proof of authenticity(FAA Form8130 or EASA Form1)in the contract state
+ function storeProof(bytes32 proof) {
+   proofs[proof] = true;
+ }
+ // calculate and store the proof of authenticity(FAA Form8130 or EASA Form1)for a part
+ function authenticate(string document) {
+   var proof = proofFor(document);
+   storeProof(proof);
+ }
+ // helper function to get a document's sha256
+ function proofFor(string document) constant returns (bytes32) {
+   return sha256(document);
+ }
+ // check if a part has a document that has been authenticated
+ function checkDocument(string document) constant returns (bool) {
+   var proof = proofFor(document);
+   return hasProof(proof);
+ }
+ // returns true if proof is stored
+ function hasProof(bytes32 proof) constant returns(bool) {
+   return proofs[proof];
+ }
+}
